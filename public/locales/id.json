@@ -1,4 +1,3 @@
-
 {
   "settings": {
     "title": "Pengaturan",
@@ -72,7 +71,7 @@
   "infoModal": {
     "title": "Tentang Aplikasi",
     "appName": "Yuk Sholat",
-    "appVersion": "Jadwal Sholat Digital v1.0",
+    "appVersion": "Jadwal Sholat Digital v1.1",
     "welcomeTitle": "Selamat Datang!",
     "welcomeText": "Yuk Sholat adalah aplikasi jadwal sholat digital yang dirancang khusus untuk ditampilkan di monitor masjid. Aplikasi ini kaya fitur, dapat dikustomisasi, dan yang terpenting, dapat berjalan 100% offline setelah pengaturan awal selesai.",
     "guideTitle": "Panduan Pengguna",
@@ -159,29 +158,6 @@
       "0": "Standar (Shafi'i, Maliki, Hanbali)",
       "1": "Hanafi"
     }
-  },
-  "weekdays": {
-    "Sunday": "Ahad",
-    "Monday": "Senin",
-    "Tuesday": "Selasa",
-    "Wednesday": "Rabu",
-    "Thursday": "Kamis",
-    "Friday": "Jum'at",
-    "Saturday": "Sabtu"
-  },
-  "months": {
-    "January": "Januari",
-    "February": "Februari",
-    "March": "Maret",
-    "April": "April",
-    "May": "Mei",
-    "June": "Juni",
-    "July": "Juli",
-    "August": "Agustus",
-    "September": "September",
-    "October": "Oktober",
-    "November": "November",
-    "December": "Desember"
   },
   "hijriMonths": {
     "Muḥarram": "Muharram",

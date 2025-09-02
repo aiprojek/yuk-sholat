@@ -114,7 +114,7 @@ Kontribusi dari komunitas sangat kami harapkan untuk membuat aplikasi ini menjad
 Aplikasi ini 100% gratis dan akan selalu begitu. Jika Anda merasa aplikasi ini bermanfaat dan ingin mendukung pengembangan selanjutnya, Anda dapat memberikan donasi melalui tautan di bawah ini. Dukungan Anda sangat berarti bagi kami.
 
 <a href="https://lynk.id/aiprojek/s/bvBJvdA" target="_blank">
-  <img src="https://img.shields.io/badge/☕-Donasi%20di%20Saweria-orange?style=for-the-badge&logo=buy-me-a-coffee" alt="Donasi">
+  <img src="https://img.shields.io/badge/☕-Donasi-orange?style=for-the-badge&logo=buy-me-a-coffee" alt="Donasi">
 </a>
 
 ## 📜 Lisensi

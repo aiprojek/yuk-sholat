@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useSettings } from './hooks/useSettings';
 import type { Settings, PrayerTimes, PrayerName, AladhanData, TimeCorrections, AladhanCalendarResponse, AladhanHijriDate } from './types';
@@ -393,11 +392,12 @@ const App: React.FC = () => {
     
     const fetchAndSetPrayerTimes = useCallback(async () => {
         const currentDate = new Date();
+        
         setGregorianDate(new Intl.DateTimeFormat(language, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(currentDate));
 
         const setFallbackHijriDate = () => {
             try {
-                const formattedDate = new Intl.DateTimeFormat(`${language}-u-ca-islamic-nu-latn`, { day: 'numeric', month: 'long', year: 'numeric' }).format(currentDate);
+                const formattedDate = new Intl.DateTimeFormat(`${language}-u-ca-islamic`, { day: 'numeric', month: 'long', year: 'numeric' }).format(currentDate);
                 setHijriDate(formattedDate.replace(" AH", " H"));
             } catch (e) {
                 console.error("Failed to format Hijri date with Intl:", e);
@@ -405,27 +405,25 @@ const App: React.FC = () => {
             }
         };
         
-        const setApiHijriDate = async () => {
-            if (isOnline) {
-                try {
-                    const hijriResponse = await fetchHijriDate(currentDate);
-                    if (hijriResponse.data) {
-                        setHijriDate(formatHijriDateFromApi(hijriResponse.data.hijri, language, t));
-                    } else {
-                        setFallbackHijriDate();
-                    }
-                } catch (error) {
+        if (isOnline) {
+            try {
+                const hijriResponse = await fetchHijriDate(currentDate);
+                if (hijriResponse.data) {
+                    setHijriDate(formatHijriDateFromApi(hijriResponse.data.hijri, language, t));
+                } else {
                     setFallbackHijriDate();
                 }
-            } else {
+            } catch (error) {
+                console.error("Failed to fetch Hijri date from API:", error);
                 setFallbackHijriDate();
             }
-        };
+        } else {
+            setFallbackHijriDate();
+        }
 
         if (settings.prayerTimeSource === 'manual') {
             const correctedTimes = applyAllCorrections(settings.manualPrayerTimes, settings.timeCorrections);
             setPrayerTimes(correctedTimes);
-            await setApiHijriDate();
             return;
         }
 
@@ -453,12 +451,10 @@ const App: React.FC = () => {
                 };
                 const correctedTimes = applyAllCorrections(transformedTimings, settings.timeCorrections);
                 setPrayerTimes(correctedTimes);
-                setHijriDate(formatHijriDateFromApi(todaysData.date.hijri, language, t));
             } else {
                  console.warn(`Could not find prayer times for day ${day} in cached/fetched data.`);
                  const correctedTimes = applyAllCorrections(settings.manualPrayerTimes, settings.timeCorrections);
                  setPrayerTimes(correctedTimes);
-                 setApiHijriDate();
             }
         };
 
@@ -468,51 +464,46 @@ const App: React.FC = () => {
                 const parsedData: AladhanCalendarResponse = JSON.parse(cachedData);
                 if (parsedData.data && parsedData.data.length > 0) {
                     processApiData(parsedData.data);
+                    return; 
                 }
             }
             
-            if (!cachedData && !isOnline) {
+            if (!isOnline) {
                 console.warn("Offline and no cache for this month.");
                 const correctedTimes = applyAllCorrections(settings.manualPrayerTimes, settings.timeCorrections);
                 setPrayerTimes(correctedTimes);
-                setFallbackHijriDate();
                 return;
             }
 
-            if (!cachedData && isOnline) {
-                const response = settings.locationSource === 'address'
-                    ? await fetchMonthlyPrayerTimesByAddress(year, month, settings.address, settings.calculationMethod, settings.school, settings.midnightMode, settings.shafaq)
-                    : await fetchMonthlyPrayerTimesByCity(year, month, settings.city, settings.country, settings.calculationMethod, settings.school, settings.midnightMode, settings.shafaq);
+            const response = settings.locationSource === 'address'
+                ? await fetchMonthlyPrayerTimesByAddress(year, month, settings.address, settings.calculationMethod, settings.school, settings.midnightMode, settings.shafaq)
+                : await fetchMonthlyPrayerTimesByCity(year, month, settings.city, settings.country, settings.calculationMethod, settings.school, settings.midnightMode, settings.shafaq);
 
-                if (response.data && response.data.length > 0) {
-                    localStorage.setItem(cacheKey, JSON.stringify(response));
-                    processApiData(response.data);
-                } else {
-                    throw new Error("API returned no data for the current month.");
-                }
+            if (response.data && response.data.length > 0) {
+                localStorage.setItem(cacheKey, JSON.stringify(response));
+                processApiData(response.data);
+            } else {
+                throw new Error("API returned no data for the current month.");
             }
 
-            if (isOnline) {
-                const nextMonthDate = new Date(currentDate);
-                nextMonthDate.setMonth(currentDate.getMonth() + 1);
-                const nextYear = nextMonthDate.getFullYear();
-                const nextMonth = nextMonthDate.getMonth() + 1;
-                const nextMonthCacheKey = `prayerTimes_${nextYear}-${String(nextMonth).padStart(2, '0')}_${locationIdentifier}_${settings.calculationMethod}_${settings.school}_${settings.midnightMode}_${settings.shafaq}`;
-                
-                if (!localStorage.getItem(nextMonthCacheKey)) {
-                     const nextMonthResponse = settings.locationSource === 'address'
-                        ? await fetchMonthlyPrayerTimesByAddress(nextYear, nextMonth, settings.address, settings.calculationMethod, settings.school, settings.midnightMode, settings.shafaq)
-                        : await fetchMonthlyPrayerTimesByCity(nextYear, nextMonth, settings.city, settings.country, settings.calculationMethod, settings.school, settings.midnightMode, settings.shafaq);
-                    if (nextMonthResponse.data) {
-                        localStorage.setItem(nextMonthCacheKey, JSON.stringify(nextMonthResponse));
-                    }
+            const nextMonthDate = new Date(currentDate);
+            nextMonthDate.setMonth(currentDate.getMonth() + 1);
+            const nextYear = nextMonthDate.getFullYear();
+            const nextMonth = nextMonthDate.getMonth() + 1;
+            const nextMonthCacheKey = `prayerTimes_${nextYear}-${String(nextMonth).padStart(2, '0')}_${locationIdentifier}_${settings.calculationMethod}_${settings.school}_${settings.midnightMode}_${settings.shafaq}`;
+            
+            if (!localStorage.getItem(nextMonthCacheKey)) {
+                 const nextMonthResponse = settings.locationSource === 'address'
+                    ? await fetchMonthlyPrayerTimesByAddress(nextYear, nextMonth, settings.address, settings.calculationMethod, settings.school, settings.midnightMode, settings.shafaq)
+                    : await fetchMonthlyPrayerTimesByCity(nextYear, nextMonth, settings.city, settings.country, settings.calculationMethod, settings.school, settings.midnightMode, settings.shafaq);
+                if (nextMonthResponse.data) {
+                    localStorage.setItem(nextMonthCacheKey, JSON.stringify(nextMonthResponse));
                 }
             }
         } catch (error) {
             console.error("Error fetching prayer times: ", error);
             const correctedTimes = applyAllCorrections(settings.manualPrayerTimes, settings.timeCorrections);
             setPrayerTimes(correctedTimes);
-            await setApiHijriDate();
         }
     }, [
         settings.prayerTimeSource, settings.manualPrayerTimes, settings.city, settings.country,
@@ -823,7 +814,6 @@ const App: React.FC = () => {
         currentInfoSlideIndex
     ]);
 
-    // This check is important to prevent rendering with incomplete translations
     if (!translations.settings) {
         return <div className="h-screen w-screen bg-gray-900 flex items-center justify-center text-white">Loading...</div>;
     }
@@ -882,7 +872,6 @@ const App: React.FC = () => {
             <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet" />
             
             <style>{`
-                /* From Tailwind CSS v3.x for tabular nums */
                 .tabular-nums {
                   font-variant-numeric: tabular-nums;
                 }
