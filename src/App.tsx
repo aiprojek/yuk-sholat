@@ -41,7 +41,7 @@ const InfoSlideDisplay: React.FC<{ content: string }> = ({ content }) => {
     return (
         <div className="h-full w-full flex flex-col items-center justify-center p-8 text-center animate-fade-in">
             <div
-                className="text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight text-shadow-lg"
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight text-shadow-lg"
                 dangerouslySetInnerHTML={{ __html: content.replace(/\n/g, '<br />') }}
             />
         </div>
@@ -59,15 +59,15 @@ const DzikirDisplay: React.FC<{
 
     return (
         <div className="h-full w-full flex flex-col items-center justify-center p-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-shadow-lg" style={{ color: settings.accentColor }}>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-shadow-lg" style={{ color: settings.accentColor }}>
                 {t('main.dzikirTitle')}
             </h2>
             <div className="flex-grow flex items-center justify-center w-full">
                  <div className={`space-y-4 max-w-4xl transition-opacity duration-1000 ease-in-out ${isDzikirVisible ? 'opacity-100' : 'opacity-0'}`}>
-                    <p className="text-4xl md:text-6xl leading-tight text-shadow" style={{ fontFamily: "'Noto Naskh Arabic', serif" }}>
+                    <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight text-shadow" style={{ fontFamily: "'Noto Naskh Arabic', serif" }}>
                         {currentDzikir.arabic}
                     </p>
-                    <p className="text-xl md:text-2xl text-shadow">
+                    <p className="text-lg sm:text-xl md:text-2xl text-shadow">
                         {currentDzikir.transliteration}
                     </p>
                 </div>
@@ -113,12 +113,12 @@ const MainDisplay: React.FC<{
         case 'azan':
             return (
                 <div className="flex flex-col items-center justify-center text-center p-4 animate-fade-in">
-                    <div className="flex items-center gap-4 text-4xl sm:text-5xl md:text-6xl font-bold text-shadow-lg animate-blink">
-                       <AlarmIcon className="w-12 h-12 md:w-16 md:h-16" />
+                    <div className="flex items-center gap-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-shadow-lg animate-blink">
+                       <AlarmIcon className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16" />
                        <h2>{t('main.azanMessage')}</h2>
-                       <AlarmIcon className="w-12 h-12 md:w-16 md:h-16" />
+                       <AlarmIcon className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16" />
                     </div>
-                    <p className="text-xl sm:text-2xl md:text-3xl mt-4 text-shadow">{t('main.prepareMessage')}</p>
+                    <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl mt-4 text-shadow">{t('main.prepareMessage')}</p>
                 </div>
             );
         case 'iqamahCountdown':
@@ -127,10 +127,10 @@ const MainDisplay: React.FC<{
                 const seconds = iqamahInfo.countdown % 60;
                 return (
                     <div className="flex flex-col items-center justify-center animate-fade-in">
-                        <div className="text-7xl md:text-9xl font-bold tracking-tight text-shadow-lg tabular-nums" style={{ color: settings.accentColor }}>
+                        <div className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight text-shadow-lg tabular-nums" style={{ color: settings.accentColor }}>
                            {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
                         </div>
-                        <p className="text-xl sm:text-2xl md:text-3xl mt-2 text-shadow">{t('main.iqamahCountdown')} {PRAYER_NAMES.find(p => p.key === iqamahInfo.prayer)?.label}</p>
+                        <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl mt-2 text-shadow">{t('main.iqamahCountdown')} {PRAYER_NAMES.find(p => p.key === iqamahInfo.prayer)?.label}</p>
                     </div>
                 );
             }
@@ -138,8 +138,8 @@ const MainDisplay: React.FC<{
         case 'silencePhone':
             return (
                  <div className="flex flex-col items-center justify-center text-center p-4 animate-fade-in">
-                    <PhoneSilenceIcon className="w-20 h-20 md:w-28 md:h-28 mb-4 text-shadow-lg animate-blink" />
-                    <p className="text-2xl sm:text-3xl md:text-4xl font-semibold text-shadow">
+                    <PhoneSilenceIcon className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 mb-4 text-shadow-lg animate-blink" />
+                    <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-shadow">
                        {t('main.silencePhoneTitle')}
                     </p>
                 </div>
@@ -147,8 +147,8 @@ const MainDisplay: React.FC<{
         case 'prayerInProgress':
              return (
                  <div className="flex flex-col items-center justify-center text-center animate-fade-in">
-                    <h2 className="text-6xl md:text-8xl font-bold text-shadow-lg" style={{color: settings.accentColor}}>{t('main.prayerInProgressTitle')}</h2>
-                    <p className="text-2xl sm:text-3xl md:text-4xl mt-4 text-shadow">{t('main.prayerInProgressSubtitle')}</p>
+                    <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold text-shadow-lg" style={{color: settings.accentColor}}>{t('main.prayerInProgressTitle')}</h2>
+                    <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl mt-4 text-shadow">{t('main.prayerInProgressSubtitle')}</p>
                 </div>
             );
         case 'dzikir':
@@ -161,15 +161,15 @@ const MainDisplay: React.FC<{
              }
              return (
                  <div className="flex flex-col items-center justify-center animate-fade-in">
-                    <div className="text-8xl md:text-[10rem] font-bold tracking-tight text-shadow-lg tabular-nums">
+                    <div className="text-7xl sm:text-8xl md:text-9xl lg:text-[10rem] font-bold tracking-tight text-shadow-lg tabular-nums">
                         {timeFormatter.format(currentTime)}
                     </div>
-                    <div className="mt-4 text-2xl sm:text-3xl md:text-4xl text-shadow text-center">
+                    <div className="mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl text-shadow text-center">
                        <div>{gregorianDate}</div>
                        <div className="opacity-80">{hijriDate}</div>
                     </div>
                     {nextPrayer && (
-                        <div className="mt-6 inline-grid place-items-center rounded-2xl backdrop-blur-md bg-black/30 px-6 py-3 text-2xl sm:text-3xl md:text-4xl text-shadow">
+                        <div className="mt-6 inline-grid place-items-center rounded-2xl backdrop-blur-md bg-black/30 px-4 py-2 sm:px-6 sm:py-3 text-xl sm:text-2xl md:text-3xl lg:text-4xl text-shadow">
                             {/* Sizer element with the longest possible content */}
                             <span className="invisible col-start-1 row-start-1 whitespace-pre">
                                {t('main.countdownPrefix')} <span className="font-semibold">{PRAYER_NAMES.find(p => p.key === 'Isha')?.label}</span>
@@ -209,7 +209,7 @@ const LandscapeLayout: React.FC<{
     return (
         <div className="flex flex-col h-full w-full p-4 sm:p-6 md:p-8">
             <header className="text-center w-full">
-                <h1 className="text-4xl md:text-5xl font-bold tracking-wider text-shadow-lg">{settings.masjidName}</h1>
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-wider text-shadow-lg">{settings.masjidName}</h1>
             </header>
             
             <main className="flex-1 flex flex-col items-center justify-center text-center relative">
@@ -219,7 +219,7 @@ const LandscapeLayout: React.FC<{
             </main>
             
             <footer className="w-full pb-4">
-              <div className="grid grid-cols-6 gap-4 sm:gap-6 max-w-7xl mx-auto">
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-4 md:gap-6 max-w-7xl mx-auto">
                 {landscapePrayerDisplayOrder.map(name => {
                     const isDhuhrOnJumat = isJumat && name === 'Dhuhr';
                     const isNext = (displayState === 'default' && nextPrayer?.name === name) || currentPrayerInSession === name;
@@ -228,17 +228,17 @@ const LandscapeLayout: React.FC<{
                     const iqamahMinutes = name !== 'Shuruq' ? settings.iqamah[name as keyof typeof settings.iqamah] : 0;
                     
                     return (
-                        <div key={name} className={`p-3 sm:p-4 rounded-2xl text-center shadow-lg transition-all duration-300 backdrop-blur-md border-2 ${isHighlighted ? 'border-opacity-100 scale-110' : 'border-transparent border-opacity-0'}`}
+                        <div key={name} className={`p-2 sm:p-3 md:p-4 rounded-2xl text-center shadow-lg transition-all duration-300 backdrop-blur-md border-2 ${isHighlighted ? 'border-opacity-100 scale-105 sm:scale-110' : 'border-transparent border-opacity-0'}`}
                              style={{ 
                                 backgroundColor: isDark ? 'rgba(0, 0, 0, 0.4)' : 'rgba(241, 245, 249, 0.5)',
                                 borderColor: isHighlighted ? settings.accentColor : 'transparent', 
                                 boxShadow: isHighlighted ? `0 0 30px ${settings.accentColor}`: 'none' 
                              }}
                         >
-                            <p className="text-xl sm:text-2xl md:text-3xl font-semibold text-shadow" style={{ color: isHighlighted ? settings.accentColor : 'inherit' }}>{prayerLabel}</p>
-                            <p className="text-3xl sm:text-4xl md:text-5xl font-bold my-1 text-shadow-md tabular-nums">{prayerTimes[name]}</p>
+                            <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-shadow" style={{ color: isHighlighted ? settings.accentColor : 'inherit' }}>{prayerLabel}</p>
+                            <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold my-1 text-shadow-md tabular-nums">{prayerTimes[name]}</p>
                             {name !== 'Shuruq' && (
-                                <p className="text-lg sm:text-xl md:text-2xl opacity-80 text-shadow">+ {iqamahMinutes}</p>
+                                <p className="text-base sm:text-lg md:text-xl lg:text-2xl opacity-80 text-shadow">+ {iqamahMinutes}</p>
                             )}
                         </div>
                     );
@@ -264,7 +264,7 @@ const PortraitLayout: React.FC<{
     return (
          <div className="flex flex-col h-full w-full p-4">
             <header className="text-center pt-4">
-              <h1 className="text-3xl font-bold tracking-wider text-shadow-lg">{settings.masjidName}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-wider text-shadow-lg">{settings.masjidName}</h1>
             </header>
             
             <main className="flex-1 flex flex-col items-center justify-center my-4 relative">
@@ -273,7 +273,7 @@ const PortraitLayout: React.FC<{
                 </div>
             </main>
             
-            <footer className="space-y-3 pb-4 max-w-md w-full mx-auto">
+            <footer className="space-y-2 sm:space-y-3 pb-4 max-w-md w-full mx-auto">
                 {portraitDisplayOrder.map(name => {
                     const isDhuhrOnJumat = isJumat && name === 'Dhuhr';
                     const isNext = (displayState === 'default' && nextPrayer?.name === name) || currentPrayerInSession === name;
@@ -290,10 +290,10 @@ const PortraitLayout: React.FC<{
                               }}
                          >
                             <div className="flex-1">
-                                <p className="text-xl font-semibold text-shadow" style={{ color: isHighlighted ? settings.accentColor : 'inherit' }}>{prayerLabel}</p>
+                                <p className="text-lg sm:text-xl font-semibold text-shadow" style={{ color: isHighlighted ? settings.accentColor : 'inherit' }}>{prayerLabel}</p>
                                 {name !== 'Shuruq' && <p className="text-sm opacity-80 text-shadow">{t('settings.iqamahWaitTime')} +{iqamahMinutes} {t('main.minutes')}</p>}
                             </div>
-                            <p className="text-4xl font-bold text-shadow-md tabular-nums">{prayerTimes[name]}</p>
+                            <p className="text-3xl sm:text-4xl font-bold text-shadow-md tabular-nums">{prayerTimes[name]}</p>
                         </div>
                     );
                 })}
@@ -949,7 +949,7 @@ const App: React.FC = () => {
                         <div className={`flex-1 overflow-hidden ${isDark ? 'text-white' : 'text-slate-800'}`}>
                             <RunningText text={dynamicRunningText} accentColor={settings.accentColor} />
                         </div>
-                        <div className="px-4 whitespace-nowrap opacity-80">
+                        <div className="px-4 whitespace-nowrap opacity-80 hidden sm:block">
                             {t('main.createdBy')}
                         </div>
                     </div>

@@ -31,7 +31,7 @@ const RunningText: React.FC<RunningTextProps> = ({ text, accentColor }) => {
 
   const textElement = (
     <span
-      className="text-2xl md:text-3xl font-medium px-8"
+      className="text-xl sm:text-2xl md:text-3xl font-medium px-8"
       style={{ color: accentColor }}
       dangerouslySetInnerHTML={{ __html: text }}
     />
