@@ -1,3 +1,4 @@
+
 export interface PrayerTimes {
   Fajr: string;
   Dhuhr: string;
@@ -115,4 +116,10 @@ export interface AladhanTimingsResponse {
   code: number;
   status: string;
   data: AladhanData;
+}
+// FIX: Add missing GToHResponse interface.
+export interface GToHResponse {
+  code: number;
+  status: string;
+  data: AladhanDate;
 }

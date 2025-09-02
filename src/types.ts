@@ -117,3 +117,9 @@ export interface AladhanTimingsResponse {
   status: string;
   data: AladhanData;
 }
+
+export interface GToHResponse {
+  code: number;
+  status: string;
+  data: AladhanDate;
+}

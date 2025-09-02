@@ -1,4 +1,6 @@
-import type { AladhanTimingsResponse, AladhanCalendarResponse } from '../types';
+
+// FIX: Corrected import path from ../types to ./types
+import type { AladhanTimingsResponse, AladhanCalendarResponse, GToHResponse } from './types';
 
 const API_BASE_URL = 'https://api.aladhan.com/v1';
 
@@ -9,6 +11,21 @@ const formatDate = (date: Date) => {
     return `${day}-${month}-${year}`;
 };
 
+export const fetchHijriDate = async (date: Date): Promise<GToHResponse> => {
+    const dateString = formatDate(date);
+    const url = `${API_BASE_URL}/gToH?date=${dateString}`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`API call failed with status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data as GToHResponse;
+    } catch (error) {
+        console.error('Failed to fetch Hijri date:', error);
+        throw error;
+    }
+};
 
 export const fetchPrayerTimesByCity = async (
   date: Date,

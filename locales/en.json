@@ -159,5 +159,19 @@
       "0": "Standard (Shafi'i, Maliki, Hanbali)",
       "1": "Hanafi"
     }
+  },
+  "hijriMonths": {
+    "Muḥarram": "Muḥarram",
+    "Ṣafar": "Ṣafar",
+    "Rabīʿ al-Awwal": "Rabīʿ al-Awwal",
+    "Rabīʿ al-Thānī": "Rabīʿ al-Thānī",
+    "Jumādā al-Ūlá": "Jumādā al-Ūlá",
+    "Jumādā al-Ākhirah": "Jumādā al-Ākhirah",
+    "Rajab": "Rajab",
+    "Shaʿbān": "Shaʿbān",
+    "Ramaḍān": "Ramaḍān",
+    "Shawwāl": "Shawwāl",
+    "Dhū al-Qaʿdah": "Dhū al-Qaʿdah",
+    "Dhū al-Ḥijjah": "Dhū al-Ḥijjah"
   }
 }
