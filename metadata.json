@@ -1,0 +1,5 @@
+{
+  "name": "Yuk Sholat - Jadwal Sholat Digital",
+  "description": "A digital prayer time display for mosques, featuring customizable prayer time calculations, themes, wallpapers, and a running text feature. It's designed to be responsive and work offline.",
+  "requestFramePermissions": []
+}
