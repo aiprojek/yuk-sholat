@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useSettings } from './hooks/useSettings';
-import type { Settings, PrayerTimes, PrayerName, AladhanData, TimeCorrections, AladhanCalendarResponse, AladhanHijriDate } from './types';
-import { fetchPrayerTimesByCity, fetchPrayerTimesByAddress, fetchHijriDate } from './services/prayerTimeService';
-import { fetchMonthlyPrayerTimesByCity, fetchMonthlyPrayerTimesByAddress } from './services/prayerTimeService';
+import type { Settings, PrayerTimes, PrayerName, TimeCorrections, AladhanCalendarResponse, AladhanHijriDate, AladhanData } from './types';
+import { fetchMonthlyPrayerTimesByCity, fetchMonthlyPrayerTimesByAddress, fetchHijriDate } from './services/prayerTimeService';
 import { fetchRandomQuranVerse, fetchRandomHadith } from './services/contentService';
 import { DEFAULT_PRAYER_TIMES, DEFAULT_SETTINGS, landscapePrayerDisplayOrder, portraitDisplayOrder, dzikirTexts } from './constants';
 import SettingsModal from './components/SettingsModal';
@@ -24,9 +23,16 @@ const applyTimeCorrection = (time: string, correction: number): string => {
   return `${newHours}:${newMinutes}`;
 };
 
+const toArabicNumerals = (num: string | number): string => {
+    const arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    return String(num).replace(/[0-9]/g, (d) => arabicNumerals[parseInt(d)]);
+};
+
 const formatHijriDateFromApi = (hijri: AladhanHijriDate, lang: 'id' | 'en' | 'ar', t: (key: string) => string): string => {
     if (lang === 'ar') {
-        return `${hijri.day} ${hijri.month.ar} ${hijri.year} هـ`;
+        const day = toArabicNumerals(hijri.day);
+        const year = toArabicNumerals(hijri.year);
+        return `${day} ${hijri.month.ar} ${year} هـ`;
     }
     const hijriMonthName = t(`hijriMonths.${hijri.month.en}`);
     const month = hijriMonthName.startsWith('hijriMonths.') ? hijri.month.en : hijriMonthName;
@@ -47,10 +53,9 @@ const AlarmIcon = ({ className }: { className?: string }) => (
 
 const InfoSlideDisplay: React.FC<{ content: string }> = ({ content }) => {
     return (
-        <div className="h-full w-full flex flex-col items-center justify-center p-4 md:p-8 text-center animate-fade-in">
+        <div className="h-full w-full flex flex-col items-center justify-center p-8 text-center animate-fade-in">
             <div
-                className="font-semibold leading-tight text-shadow-lg"
-                style={{ fontSize: 'clamp(1.8rem, 5vw, 3.75rem)' }}
+                className="text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight text-shadow-lg"
                 dangerouslySetInnerHTML={{ __html: content.replace(/\n/g, '<br />') }}
             />
         </div>
@@ -68,15 +73,15 @@ const DzikirDisplay: React.FC<{
 
     return (
         <div className="h-full w-full flex flex-col items-center justify-center p-4 text-center">
-            <h2 className="font-bold mb-8 text-shadow-lg" style={{ color: settings.accentColor, fontSize: 'clamp(1.5rem, 5vw, 2.25rem)' }}>
+            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-shadow-lg" style={{ color: settings.accentColor }}>
                 {t('main.dzikirTitle')}
             </h2>
             <div className="flex-grow flex items-center justify-center w-full">
                  <div className={`space-y-4 max-w-4xl transition-opacity duration-1000 ease-in-out ${isDzikirVisible ? 'opacity-100' : 'opacity-0'}`}>
-                    <p className="leading-tight text-shadow" style={{ fontFamily: "'Noto Naskh Arabic', serif", fontSize: 'clamp(2rem, 8vw, 3.75rem)' }}>
+                    <p className="text-4xl md:text-6xl leading-tight text-shadow" style={{ fontFamily: "'Noto Naskh Arabic', serif" }}>
                         {currentDzikir.arabic}
                     </p>
-                    <p className="text-shadow" style={{ fontSize: 'clamp(1.1rem, 3vw, 1.5rem)' }}>
+                    <p className="text-xl md:text-2xl text-shadow">
                         {currentDzikir.transliteration}
                     </p>
                 </div>
@@ -99,6 +104,7 @@ const MainDisplay: React.FC<{
     iqamahInfo: { prayer: PrayerName; countdown: number } | null;
     isDzikirVisible: boolean;
     currentDzikirIndex: number;
+    formatNumber: (num: string | number) => string;
     t: (key: string) => string;
 }> = ({
     displayState,
@@ -114,32 +120,35 @@ const MainDisplay: React.FC<{
     iqamahInfo,
     isDzikirVisible,
     currentDzikirIndex,
+    formatNumber,
     t,
 }) => {
     const timeFormatter = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+    const formattedTime = formatNumber(timeFormatter.format(currentTime));
 
    switch (displayState) {
         case 'azan':
             return (
                 <div className="flex flex-col items-center justify-center text-center p-4 animate-fade-in">
-                    <div className="flex items-center gap-4 font-bold text-shadow-lg animate-blink" style={{ fontSize: 'clamp(1.8rem, 6vw, 3.75rem)' }}>
-                       <AlarmIcon className="w-[1em] h-[1em]" />
+                    <div className="flex items-center gap-4 text-4xl sm:text-5xl md:text-6xl font-bold text-shadow-lg animate-blink">
+                       <AlarmIcon className="w-12 h-12 md:w-16 md:h-16" />
                        <h2>{t('main.azanMessage')}</h2>
-                       <AlarmIcon className="w-[1em] h-[1em]" />
+                       <AlarmIcon className="w-12 h-12 md:w-16 md:h-16" />
                     </div>
-                    <p className="mt-4 text-shadow" style={{ fontSize: 'clamp(1.2rem, 4vw, 1.875rem)' }}>{t('main.prepareMessage')}</p>
+                    <p className="text-xl sm:text-2xl md:text-3xl mt-4 text-shadow">{t('main.prepareMessage')}</p>
                 </div>
             );
         case 'iqamahCountdown':
             if (iqamahInfo) {
                 const minutes = Math.floor(iqamahInfo.countdown / 60);
                 const seconds = iqamahInfo.countdown % 60;
+                const formattedCountdown = `${formatNumber(String(minutes).padStart(2, '0'))}:${formatNumber(String(seconds).padStart(2, '0'))}`;
                 return (
                     <div className="flex flex-col items-center justify-center animate-fade-in">
-                        <div className="font-bold tracking-tight text-shadow-lg tabular-nums" style={{ color: settings.accentColor, fontSize: 'clamp(3.5rem, 18vw, 8rem)' }}>
-                           {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+                        <div className="text-7xl md:text-9xl font-bold tracking-tight text-shadow-lg tabular-nums" style={{ color: settings.accentColor }}>
+                           {formattedCountdown}
                         </div>
-                        <p className="mt-2 text-shadow" style={{ fontSize: 'clamp(1.2rem, 4vw, 1.875rem)' }}>{t('main.iqamahCountdown')} {PRAYER_NAMES.find(p => p.key === iqamahInfo.prayer)?.label}</p>
+                        <p className="text-xl sm:text-2xl md:text-3xl mt-2 text-shadow">{t('main.iqamahCountdown')} {PRAYER_NAMES.find(p => p.key === iqamahInfo.prayer)?.label}</p>
                     </div>
                 );
             }
@@ -147,8 +156,8 @@ const MainDisplay: React.FC<{
         case 'silencePhone':
             return (
                  <div className="flex flex-col items-center justify-center text-center p-4 animate-fade-in">
-                    <PhoneSilenceIcon className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 mb-4 text-shadow-lg animate-blink" />
-                    <p className="font-semibold text-shadow" style={{ fontSize: 'clamp(1.3rem, 5vw, 2.25rem)' }}>
+                    <PhoneSilenceIcon className="w-20 h-20 md:w-28 md:h-28 mb-4 text-shadow-lg animate-blink" />
+                    <p className="text-2xl sm:text-3xl md:text-4xl font-semibold text-shadow">
                        {t('main.silencePhoneTitle')}
                     </p>
                 </div>
@@ -156,8 +165,8 @@ const MainDisplay: React.FC<{
         case 'prayerInProgress':
              return (
                  <div className="flex flex-col items-center justify-center text-center animate-fade-in">
-                    <h2 className="font-bold text-shadow-lg" style={{color: settings.accentColor, fontSize: 'clamp(2.5rem, 10vw, 6rem)'}}>{t('main.prayerInProgressTitle')}</h2>
-                    <p className="mt-4 text-shadow" style={{ fontSize: 'clamp(1.3rem, 5vw, 2.25rem)' }}>{t('main.prayerInProgressSubtitle')}</p>
+                    <h2 className="text-6xl md:text-8xl font-bold text-shadow-lg" style={{color: settings.accentColor}}>{t('main.prayerInProgressTitle')}</h2>
+                    <p className="text-2xl sm:text-3xl md:text-4xl mt-4 text-shadow">{t('main.prayerInProgressSubtitle')}</p>
                 </div>
             );
         case 'dzikir':
@@ -170,15 +179,15 @@ const MainDisplay: React.FC<{
              }
              return (
                  <div className="flex flex-col items-center justify-center animate-fade-in">
-                    <div className="font-bold tracking-tight text-shadow-lg tabular-nums" style={{ fontSize: 'clamp(4rem, 20vw, 10rem)' }}>
-                        {timeFormatter.format(currentTime)}
+                    <div className="text-8xl md:text-[10rem] font-bold tracking-tight text-shadow-lg tabular-nums">
+                        {formattedTime}
                     </div>
-                    <div className="mt-4 text-shadow text-center" style={{ fontSize: 'clamp(1.25rem, 4vw, 2.25rem)' }}>
+                    <div className="mt-4 text-2xl sm:text-3xl md:text-4xl text-shadow text-center">
                        <div>{gregorianDate}</div>
                        <div className="opacity-80">{hijriDate}</div>
                     </div>
                     {nextPrayer && (
-                        <div className="mt-6 inline-grid place-items-center rounded-2xl backdrop-blur-md bg-black/30 px-4 py-2 sm:px-6 sm:py-3 text-shadow" style={{ fontSize: 'clamp(1.25rem, 4vw, 2.25rem)' }}>
+                        <div className="mt-6 inline-grid place-items-center rounded-2xl backdrop-blur-md bg-black/30 px-6 py-3 text-2xl sm:text-3xl md:text-4xl text-shadow">
                             <span className="invisible col-start-1 row-start-1 whitespace-pre">
                                {t('main.countdownPrefix')} <span className="font-semibold">{PRAYER_NAMES.find(p => p.key === 'Isha')?.label}</span>
                                <span className="mx-2">{t('main.countdownSuffix')}</span>
@@ -191,7 +200,7 @@ const MainDisplay: React.FC<{
                                {t('main.countdownPrefix')} <span className="font-semibold" style={{ color: settings.accentColor }}>{PRAYER_NAMES.find(p => p.key === nextPrayer.name)?.label}</span>
                                <span className="mx-2">{t('main.countdownSuffix')}</span>
                                <span className="font-semibold tracking-wider tabular-nums">
-                                   {countdown}
+                                   {formatNumber(countdown)}
                                </span>
                             </span>
                         </div>
@@ -209,14 +218,15 @@ const LandscapeLayout: React.FC<{
     nextPrayer: { name: PrayerName; time: Date } | null;
     currentPrayerInSession: PrayerName | null;
     prayerTimes: PrayerTimes;
+    formatNumber: (num: string | number) => string;
     children: React.ReactNode;
-}> = ({ settings, PRAYER_NAMES, isJumat, displayState, nextPrayer, currentPrayerInSession, prayerTimes, children }) => {
+}> = ({ settings, PRAYER_NAMES, isJumat, displayState, nextPrayer, currentPrayerInSession, prayerTimes, formatNumber, children }) => {
     const isDark = settings.theme === 'dark';
     const { t } = useLanguage();
     return (
-        <div className="flex flex-col h-full w-full p-4 md:p-8">
+        <div className="flex flex-col h-full w-full p-4 sm:p-6 md:p-8">
             <header className="text-center w-full">
-                <h1 className="font-bold tracking-wider text-shadow-lg" style={{ fontSize: 'clamp(1.8rem, 5vw, 3rem)' }}>{settings.masjidName}</h1>
+                <h1 className="text-4xl md:text-5xl font-bold tracking-wider text-shadow-lg">{settings.masjidName}</h1>
             </header>
             
             <main className="flex-1 flex flex-col items-center justify-center text-center relative">
@@ -226,7 +236,7 @@ const LandscapeLayout: React.FC<{
             </main>
             
             <footer className="w-full pb-4">
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 md:gap-4 max-w-7xl mx-auto">
+              <div className="grid grid-cols-6 gap-4 sm:gap-6 max-w-7xl mx-auto">
                 {landscapePrayerDisplayOrder.map(name => {
                     const isDhuhrOnJumat = isJumat && name === 'Dhuhr';
                     const isNext = (displayState === 'default' && nextPrayer?.name === name) || currentPrayerInSession === name;
@@ -235,17 +245,17 @@ const LandscapeLayout: React.FC<{
                     const iqamahMinutes = name !== 'Shuruq' ? settings.iqamah[name as keyof typeof settings.iqamah] : 0;
                     
                     return (
-                        <div key={name} className={`p-2 md:p-4 rounded-2xl text-center shadow-lg transition-all duration-300 backdrop-blur-md border-2 ${isHighlighted ? 'border-opacity-100 scale-105 sm:scale-110' : 'border-transparent border-opacity-0'}`}
+                        <div key={name} className={`p-3 sm:p-4 rounded-2xl text-center shadow-lg transition-all duration-300 backdrop-blur-md border-2 ${isHighlighted ? 'border-opacity-100 scale-110' : 'border-transparent border-opacity-0'}`}
                              style={{ 
                                 backgroundColor: isDark ? 'rgba(0, 0, 0, 0.4)' : 'rgba(241, 245, 249, 0.5)',
                                 borderColor: isHighlighted ? settings.accentColor : 'transparent', 
                                 boxShadow: isHighlighted ? `0 0 30px ${settings.accentColor}`: 'none' 
                              }}
                         >
-                            <p className="font-semibold text-shadow" style={{ color: isHighlighted ? settings.accentColor : 'inherit', fontSize: 'clamp(1.1rem, 2.5vw, 1.875rem)' }}>{prayerLabel}</p>
-                            <p className="font-bold my-1 text-shadow-md tabular-nums" style={{ fontSize: 'clamp(1.5rem, 4.5vw, 3rem)' }}>{prayerTimes[name]}</p>
+                            <p className="text-xl sm:text-2xl md:text-3xl font-semibold text-shadow" style={{ color: isHighlighted ? settings.accentColor : 'inherit' }}>{prayerLabel}</p>
+                            <p className="text-3xl sm:text-4xl md:text-5xl font-bold my-1 text-shadow-md tabular-nums">{formatNumber(prayerTimes[name])}</p>
                             {name !== 'Shuruq' && (
-                                <p className="opacity-80 text-shadow" style={{ fontSize: 'clamp(1rem, 2vw, 1.5rem)' }}>+ {iqamahMinutes}</p>
+                                <p className="text-lg sm:text-xl md:text-2xl opacity-80 text-shadow">+ {formatNumber(iqamahMinutes)}</p>
                             )}
                         </div>
                     );
@@ -264,14 +274,15 @@ const PortraitLayout: React.FC<{
     nextPrayer: { name: PrayerName; time: Date } | null;
     currentPrayerInSession: PrayerName | null;
     prayerTimes: PrayerTimes;
+    formatNumber: (num: string | number) => string;
     children: React.ReactNode;
-}> = ({ settings, PRAYER_NAMES, isJumat, displayState, nextPrayer, currentPrayerInSession, prayerTimes, children }) => {
+}> = ({ settings, PRAYER_NAMES, isJumat, displayState, nextPrayer, currentPrayerInSession, prayerTimes, formatNumber, children }) => {
     const isDark = settings.theme === 'dark';
     const { t } = useLanguage();
     return (
          <div className="flex flex-col h-full w-full p-4">
             <header className="text-center pt-4">
-              <h1 className="font-bold tracking-wider text-shadow-lg" style={{ fontSize: 'clamp(1.5rem, 6vw, 1.875rem)' }}>{settings.masjidName}</h1>
+              <h1 className="text-3xl font-bold tracking-wider text-shadow-lg">{settings.masjidName}</h1>
             </header>
             
             <main className="flex-1 flex flex-col items-center justify-center my-4 relative">
@@ -280,7 +291,7 @@ const PortraitLayout: React.FC<{
                 </div>
             </main>
             
-            <footer className="space-y-2 pb-4 max-w-md w-full mx-auto">
+            <footer className="space-y-3 pb-4 max-w-md w-full mx-auto">
                 {portraitDisplayOrder.map(name => {
                     const isDhuhrOnJumat = isJumat && name === 'Dhuhr';
                     const isNext = (displayState === 'default' && nextPrayer?.name === name) || currentPrayerInSession === name;
@@ -297,10 +308,10 @@ const PortraitLayout: React.FC<{
                               }}
                          >
                             <div className="flex-1">
-                                <p className="font-semibold text-shadow" style={{ color: isHighlighted ? settings.accentColor : 'inherit', fontSize: 'clamp(1.1rem, 4vw, 1.25rem)' }}>{prayerLabel}</p>
-                                {name !== 'Shuruq' && <p className="text-sm opacity-80 text-shadow">{t('settings.iqamahWaitTime')} +{iqamahMinutes} {t('main.minutes')}</p>}
+                                <p className="text-xl font-semibold text-shadow" style={{ color: isHighlighted ? settings.accentColor : 'inherit' }}>{prayerLabel}</p>
+                                {name !== 'Shuruq' && <p className="text-sm opacity-80 text-shadow">{t('settings.iqamahWaitTime')} +{formatNumber(iqamahMinutes)} {t('main.minutes')}</p>}
                             </div>
-                            <p className="font-bold text-shadow-md tabular-nums" style={{ fontSize: 'clamp(2rem, 8vw, 2.25rem)' }}>{prayerTimes[name]}</p>
+                            <p className="text-4xl font-bold text-shadow-md tabular-nums">{formatNumber(prayerTimes[name])}</p>
                         </div>
                     );
                 })}
@@ -348,6 +359,9 @@ const App: React.FC = () => {
         { key: 'Isha', label: t('prayers.isha') },
     ], [t]);
 
+    const formatNumber = useCallback((num: string | number) => {
+        return language === 'ar' ? toArabicNumerals(num) : String(num);
+    }, [language]);
 
     const playAlarm = useCallback(async () => {
         if (!settings.enableAlarmSound || !audioRef.current) return;
@@ -392,45 +406,29 @@ const App: React.FC = () => {
     
     const fetchAndSetPrayerTimes = useCallback(async () => {
         const currentDate = new Date();
-        
-        setGregorianDate(new Intl.DateTimeFormat(language, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(currentDate));
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth() + 1;
+        const day = currentDate.getDate();
 
-        const setFallbackHijriDate = () => {
-            try {
-                const formattedDate = new Intl.DateTimeFormat(`${language}-u-ca-islamic`, { day: 'numeric', month: 'long', year: 'numeric' }).format(currentDate);
-                setHijriDate(formattedDate.replace(" AH", " H"));
-            } catch (e) {
-                console.error("Failed to format Hijri date with Intl:", e);
-                setHijriDate(""); 
-            }
-        };
-        
-        if (isOnline) {
-            try {
-                const hijriResponse = await fetchHijriDate(currentDate);
-                if (hijriResponse.data) {
-                    setHijriDate(formatHijriDateFromApi(hijriResponse.data.hijri, language, t));
-                } else {
-                    setFallbackHijriDate();
-                }
-            } catch (error) {
-                console.error("Failed to fetch Hijri date from API:", error);
-                setFallbackHijriDate();
-            }
-        } else {
-            setFallbackHijriDate();
-        }
+        // Set Gregorian date immediately
+        const gregorianFormatter = new Intl.DateTimeFormat(language, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        setGregorianDate(gregorianFormatter.format(currentDate));
 
         if (settings.prayerTimeSource === 'manual') {
             const correctedTimes = applyAllCorrections(settings.manualPrayerTimes, settings.timeCorrections);
             setPrayerTimes(correctedTimes);
+            // Fetch Hijri date for manual mode
+            try {
+                const hijriResponse = await fetchHijriDate(currentDate);
+                if (hijriResponse.data) {
+                    setHijriDate(formatHijriDateFromApi(hijriResponse.data.hijri, language, t));
+                }
+            } catch (error) {
+                console.warn("Could not fetch Hijri date for manual mode.", error);
+            }
             return;
         }
 
-        const year = currentDate.getFullYear();
-        const month = currentDate.getMonth() + 1;
-        const day = currentDate.getDate();
-        
         const locationIdentifier = settings.locationSource === 'city' 
             ? `${settings.city}_${settings.country}` 
             : settings.address;
@@ -439,77 +437,52 @@ const App: React.FC = () => {
         
         const processApiData = (monthlyData: AladhanData[]) => {
             const todaysData = monthlyData.find(d => parseInt(d.date.gregorian.day, 10) === day);
+            if (!todaysData) return false;
 
-            if (todaysData) {
-                const transformedTimings: PrayerTimes = {
-                    Fajr: todaysData.timings.Fajr.split(' ')[0],
-                    Shuruq: todaysData.timings.Sunrise.split(' ')[0],
-                    Dhuhr: todaysData.timings.Dhuhr.split(' ')[0],
-                    Asr: todaysData.timings.Asr.split(' ')[0],
-                    Maghrib: todaysData.timings.Maghrib.split(' ')[0],
-                    Isha: todaysData.timings.Isha.split(' ')[0],
-                };
-                const correctedTimes = applyAllCorrections(transformedTimings, settings.timeCorrections);
-                setPrayerTimes(correctedTimes);
-            } else {
-                 console.warn(`Could not find prayer times for day ${day} in cached/fetched data.`);
-                 const correctedTimes = applyAllCorrections(settings.manualPrayerTimes, settings.timeCorrections);
-                 setPrayerTimes(correctedTimes);
-            }
+            const transformedTimings: PrayerTimes = {
+                Fajr: todaysData.timings.Fajr.split(' ')[0],
+                Shuruq: todaysData.timings.Sunrise.split(' ')[0],
+                Dhuhr: todaysData.timings.Dhuhr.split(' ')[0],
+                Asr: todaysData.timings.Asr.split(' ')[0],
+                Maghrib: todaysData.timings.Maghrib.split(' ')[0],
+                Isha: todaysData.timings.Isha.split(' ')[0],
+            };
+            const correctedTimes = applyAllCorrections(transformedTimings, settings.timeCorrections);
+            setPrayerTimes(correctedTimes);
+            setHijriDate(formatHijriDateFromApi(todaysData.date.hijri, language, t));
+            return true;
         };
 
-        try {
-            const cachedData = localStorage.getItem(cacheKey);
-            if (cachedData) {
-                const parsedData: AladhanCalendarResponse = JSON.parse(cachedData);
-                if (parsedData.data && parsedData.data.length > 0) {
-                    processApiData(parsedData.data);
-                    return; 
-                }
+        const cachedData = localStorage.getItem(cacheKey);
+        if (cachedData) {
+            const parsedData: AladhanCalendarResponse = JSON.parse(cachedData);
+            if (parsedData.data && parsedData.data.length > 0) {
+                processApiData(parsedData.data);
             }
+        }
             
-            if (!isOnline) {
-                console.warn("Offline and no cache for this month.");
-                const correctedTimes = applyAllCorrections(settings.manualPrayerTimes, settings.timeCorrections);
-                setPrayerTimes(correctedTimes);
-                return;
-            }
+        if (navigator.onLine) {
+            try {
+                 const response = settings.locationSource === 'address'
+                    ? await fetchMonthlyPrayerTimesByAddress( year, month, settings.address, settings.calculationMethod, settings.school, settings.midnightMode, settings.shafaq)
+                    : await fetchMonthlyPrayerTimesByCity( year, month, settings.city, settings.country, settings.calculationMethod, settings.school, settings.midnightMode, settings.shafaq);
 
-            const response = settings.locationSource === 'address'
-                ? await fetchMonthlyPrayerTimesByAddress(year, month, settings.address, settings.calculationMethod, settings.school, settings.midnightMode, settings.shafaq)
-                : await fetchMonthlyPrayerTimesByCity(year, month, settings.city, settings.country, settings.calculationMethod, settings.school, settings.midnightMode, settings.shafaq);
-
-            if (response.data && response.data.length > 0) {
-                localStorage.setItem(cacheKey, JSON.stringify(response));
-                processApiData(response.data);
-            } else {
-                throw new Error("API returned no data for the current month.");
-            }
-
-            const nextMonthDate = new Date(currentDate);
-            nextMonthDate.setMonth(currentDate.getMonth() + 1);
-            const nextYear = nextMonthDate.getFullYear();
-            const nextMonth = nextMonthDate.getMonth() + 1;
-            const nextMonthCacheKey = `prayerTimes_${nextYear}-${String(nextMonth).padStart(2, '0')}_${locationIdentifier}_${settings.calculationMethod}_${settings.school}_${settings.midnightMode}_${settings.shafaq}`;
-            
-            if (!localStorage.getItem(nextMonthCacheKey)) {
-                 const nextMonthResponse = settings.locationSource === 'address'
-                    ? await fetchMonthlyPrayerTimesByAddress(nextYear, nextMonth, settings.address, settings.calculationMethod, settings.school, settings.midnightMode, settings.shafaq)
-                    : await fetchMonthlyPrayerTimesByCity(nextYear, nextMonth, settings.city, settings.country, settings.calculationMethod, settings.school, settings.midnightMode, settings.shafaq);
-                if (nextMonthResponse.data) {
-                    localStorage.setItem(nextMonthCacheKey, JSON.stringify(nextMonthResponse));
+                if (response.data && response.data.length > 0) {
+                    localStorage.setItem(cacheKey, JSON.stringify(response));
+                    processApiData(response.data);
+                    setIsOnline(true);
+                } else {
+                     throw new Error("API returned no data");
                 }
+            } catch (error) {
+                 console.error("Error fetching prayer times, using cached data if available.", error);
+                 setIsOnline(false); // Set offline on API failure
             }
-        } catch (error) {
-            console.error("Error fetching prayer times: ", error);
-            const correctedTimes = applyAllCorrections(settings.manualPrayerTimes, settings.timeCorrections);
-            setPrayerTimes(correctedTimes);
         }
     }, [
         settings.prayerTimeSource, settings.manualPrayerTimes, settings.city, settings.country,
-        settings.address, settings.locationSource, settings.calculationMethod, settings.school, 
-        settings.midnightMode, settings.shafaq, settings.timeCorrections, isOnline, 
-        applyAllCorrections, language, t
+        settings.address, settings.locationSource, settings.calculationMethod, settings.school,
+        settings.midnightMode, settings.shafaq, settings.timeCorrections, applyAllCorrections, language, t
     ]);
 
     // Effect for running text rotation
@@ -574,7 +547,7 @@ const App: React.FC = () => {
         fetchAndSetPrayerTimes();
         const dailyUpdate = setInterval(() => {
             const now = new Date();
-            if (now.getHours() === 0 && now.getMinutes() < 5) { 
+            if (now.getHours() === 0 && now.getMinutes() < 5) {
                 fetchAndSetPrayerTimes();
             }
         }, 1000 * 60 * 5);
@@ -617,7 +590,6 @@ const App: React.FC = () => {
         };
     }, []);
 
-    // Effect for handling timed state transitions
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout>;
         
@@ -629,11 +601,11 @@ const App: React.FC = () => {
                  } else {
                      setDisplayState('silencePhone');
                  }
-            }, 10000); // 10 seconds for azan message
+            }, 10000);
         } else if (displayState === 'silencePhone') {
             timer = setTimeout(() => {
                 setDisplayState('prayerInProgress');
-            }, 7000); // 7 seconds for phone silence message
+            }, 7000);
         } else if (displayState === 'prayerInProgress') {
             timer = setTimeout(() => {
                 setDisplayState('dzikir');
@@ -642,7 +614,7 @@ const App: React.FC = () => {
             timer = setTimeout(() => {
                 setDisplayState('default');
                 setCurrentPrayerInSession(null);
-                fetchAndSetPrayerTimes(); // Resync for next day or any updates
+                fetchAndSetPrayerTimes();
             }, settings.dzikirDuration * 60 * 1000);
         }
         
@@ -650,7 +622,6 @@ const App: React.FC = () => {
     }, [displayState, fetchAndSetPrayerTimes, settings.prayerDuration, settings.dzikirDuration, iqamahInfo]);
 
     
-    // Effect for cycling dzikir with fade transitions
     useEffect(() => {
         if (displayState === 'dzikir') {
             let isMounted = true;
@@ -661,7 +632,7 @@ const App: React.FC = () => {
             if (totalDzikirDurationMs <= 0 || dzikirTexts.length === 0) return;
 
             const totalWeight = dzikirTexts.reduce((sum, item) => sum + item.weight, 0);
-            const FADE_DURATION = 1000; // ms
+            const FADE_DURATION = 1000;
 
             const cycleDzikir = (index: number) => {
                 if (!isMounted) return;
@@ -702,7 +673,6 @@ const App: React.FC = () => {
     }, [displayState, settings.dzikirDuration]);
 
 
-    // Main countdown and prayer state logic
     useEffect(() => {
         if (displayState === 'iqamahCountdown' && iqamahInfo) {
             const iqamahTimer = setInterval(() => {
@@ -722,7 +692,7 @@ const App: React.FC = () => {
             const today = new Date();
             const prayerDateObjects = prayerSequence.map(name => {
                 const timeParts = prayerTimes[name].split(':');
-                if (timeParts.length !== 2) return { name, time: new Date(0) }; // Invalid time
+                if (timeParts.length !== 2) return { name, time: new Date(0) };
                 const date = new Date(today);
                 date.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]), 0, 0);
                 return { name, time: date };
@@ -746,7 +716,7 @@ const App: React.FC = () => {
             if (next) {
                 const diff = next.time.getTime() - currentTime.getTime();
                 
-                 if (diff <= 1000 && diff > -1000) { // Time for prayer
+                 if (diff <= 1000 && diff > -1000) {
                     const prayerName = next.name;
                     if(prayerName !== 'Shuruq'){
                         const iqamahDuration = settings.iqamah[prayerName as keyof typeof settings.iqamah] * 60;
@@ -770,7 +740,6 @@ const App: React.FC = () => {
         }
     }, [currentTime, prayerTimes, settings.iqamah, displayState, playAlarm]);
     
-    // Effect for info slide rotation
     useEffect(() => {
         const clearTimer = () => {
             if (mainDisplayTimerRef.current) {
@@ -819,30 +788,14 @@ const App: React.FC = () => {
     }
 
     const mainDisplayProps = {
-        displayState,
-        mainDisplayMode,
-        settings,
-        PRAYER_NAMES,
-        currentInfoSlideIndex,
-        currentTime,
-        gregorianDate,
-        hijriDate,
-        nextPrayer,
-        countdown,
-        iqamahInfo,
-        isDzikirVisible,
-        currentDzikirIndex,
-        t,
+        displayState, mainDisplayMode, settings, PRAYER_NAMES, currentInfoSlideIndex,
+        currentTime, gregorianDate, hijriDate, nextPrayer, countdown,
+        iqamahInfo, isDzikirVisible, currentDzikirIndex, formatNumber, t,
     };
 
     const layoutProps = {
-        settings,
-        PRAYER_NAMES,
-        isJumat,
-        displayState,
-        nextPrayer,
-        currentPrayerInSession,
-        prayerTimes,
+        settings, PRAYER_NAMES, isJumat, displayState, nextPrayer,
+        currentPrayerInSession, prayerTimes, formatNumber,
     };
 
     const containerStyle: React.CSSProperties & { '--accent-color': string; } = {
@@ -872,22 +825,14 @@ const App: React.FC = () => {
             <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet" />
             
             <style>{`
-                .tabular-nums {
-                  font-variant-numeric: tabular-nums;
-                }
+                .tabular-nums { font-variant-numeric: tabular-nums; }
                 @keyframes fade-in {
                     from { opacity: 0; transform: scale(0.98); }
                     to { opacity: 1; transform: scale(1); }
                 }
-                .animate-fade-in {
-                    animation: fade-in 0.7s ease-out forwards;
-                }
-                @keyframes blink {
-                    50% { opacity: 0.3; }
-                }
-                .animate-blink {
-                    animation: blink 1.5s linear infinite;
-                }
+                .animate-fade-in { animation: fade-in 0.7s ease-out forwards; }
+                @keyframes blink { 50% { opacity: 0.3; } }
+                .animate-blink { animation: blink 1.5s linear infinite; }
             `}</style>
 
             <audio ref={audioRef} preload="auto" />
@@ -905,7 +850,7 @@ const App: React.FC = () => {
                 </button>
             </div>
             
-            <main className="relative flex-grow z-10 flex flex-col min-h-0">
+            <main className="relative flex-grow z-10 flex flex-col">
                  {settings.orientation === 'landscape' ? (
                     <LandscapeLayout {...layoutProps}>
                         <MainDisplay {...mainDisplayProps} />
@@ -921,13 +866,13 @@ const App: React.FC = () => {
                 <footer className="relative z-10">
                     <div className={`w-full py-3 md:py-4 ${isDark ? 'bg-black/60' : 'bg-slate-100/70'} backdrop-blur-sm flex items-center justify-between text-sm`}>
                         <div className="px-4 whitespace-nowrap">
-                            <span className={`w-3 h-3 rounded-full inline-block mr-2 ${isOnline ? 'bg-green-500' : 'bg-gray-500'}`}></span>
+                            <span className={`w-3 h-3 rounded-full inline-block me-2 ${isOnline ? 'bg-green-500' : 'bg-gray-500'}`}></span>
                             {isOnline ? t('main.online') : t('main.offline')}
                         </div>
                         <div className={`flex-1 overflow-hidden ${isDark ? 'text-white' : 'text-slate-800'}`}>
                             <RunningText text={dynamicRunningText} accentColor={settings.accentColor} />
                         </div>
-                        <div className="px-4 whitespace-nowrap opacity-80 hidden sm:block">
+                        <div className="px-4 whitespace-nowrap opacity-80">
                             {t('main.createdBy')}
                         </div>
                     </div>

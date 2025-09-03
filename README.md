@@ -4,6 +4,8 @@
 
 **Yuk Sholat** adalah aplikasi jadwal sholat digital berbasis web yang dirancang khusus untuk ditampilkan di monitor atau TV masjid. Aplikasi ini modern, kaya fitur, dapat dikustomisasi sepenuhnya, dan yang terpenting, dapat berfungsi 100% offline setelah pengaturan awal selesai.
 
+Aplikasi ini terinspirasi dari fungsionalitas dan desain [Mawaqit](https://mawaqit.net/), namun dengan pendekatan yang berbeda untuk pengguna. Di mana Mawaqit memerlukan pembuatan akun dan pengaturan melalui *backoffice*, Yuk Sholat dirancang untuk kesederhanaan maksimal: tidak perlu akun, dan semua data serta pengaturan disimpan langsung di browser perangkat Anda.
+
 Aplikasi ini bersifat gratis dan _open-source_, dibangun dengan tujuan untuk memodernisasi cara masjid menampilkan informasi waktu sholat kepada jamaah.
 
 ---
@@ -13,7 +15,7 @@ Aplikasi ini bersifat gratis dan _open-source_, dibangun dengan tujuan untuk mem
 | Tampilan Landscape (Datar) | Tampilan Portrait (Tegak) |
 | :---: | :---: |
 | _Screenshot tampilan landscape aplikasi_ | _Screenshot tampilan portrait aplikasi_ |
-| ![Landscape View](https://raw.githubusercontent.com/aiprojek/asset/main/ss-ys-landscape.png) | ![Portrait View](https://raw.githubusercontent.com/aiprojek/asset/main/ss-ys-portrait.png) |
+| ![Landscape View](https://raw.githubusercontent.com/aiprojek/asset/main/ss-ys-landscape-red.png) | ![Portrait View](https://raw.githubusercontent.com/aiprojek/asset/main/ss-ys-portrait-red.png) |
 
 ---
 
@@ -89,6 +91,24 @@ Jika Anda ingin menjalankan aplikasi ini di komputer lokal untuk pengembangan at
 
 Seluruh konfigurasi aplikasi dapat diakses melalui **ikon gerigi (⚙️)** di pojok kanan atas. Semua perubahan yang Anda simpan akan tersimpan secara permanen di `localStorage` browser, sehingga tidak akan hilang meskipun browser ditutup atau komputer dimatikan.
 
+## 🤝 Kolaborasi Manusia & AI
+
+Aplikasi ini merupakan contoh nyata dari kolaborasi antara kreativitas manusia dan kemampuan kecerdasan buatan (AI). Untuk transparansi, berikut adalah pembagian peran dalam proses pengembangannya:
+
+-   **Peran Manusia (Pengembang/Arsitek Proyek):**
+    -   **Visi dan Konsep Awal:** Memberikan ide dasar dan tujuan dari aplikasi.
+    -   **Spesifikasi Fitur:** Menentukan fitur-fitur yang harus ada dan bagaimana cara kerjanya.
+    -   **Pengujian dan Umpan Balik:** Melakukan pengujian fungsionalitas dan memberikan feedback untuk perbaikan.
+    -   **Pengarahan Desain:** Memberikan arahan estetika, tata letak, dan pengalaman pengguna secara keseluruhan.
+
+-   **Peran AI (Asisten Pemrograman):**
+    -   **Penulisan Kode:** Menghasilkan sebagian besar kode sumber (React, TypeScript, CSS) berdasarkan permintaan.
+    -   **Strukturisasi Proyek:** Membantu dalam menyusun struktur file dan komponen aplikasi.
+    -   **Implementasi Logika Kompleks:** Menulis logika untuk fitur-fitur seperti perhitungan waktu, countdown, dan alur otomatis.
+    -   **Optimasi dan Praktik Terbaik:** Menerapkan praktik-praktik pemrograman modern untuk memastikan kode bersih, efisien, dan responsif.
+
+Kolaborasi ini memungkinkan ide-ide inovatif dapat diwujudkan dengan cepat, di mana manusia berfokus pada aspek kreatif dan fungsional, sementara AI mengakselerasi proses pengembangan teknis.
+
 ## 🛠️ Teknologi yang Digunakan
 
 -   **Framework:** React dengan TypeScript
@@ -111,7 +131,7 @@ Kontribusi dari komunitas sangat kami harapkan untuk membuat aplikasi ini menjad
 
 ## ❤️ Dukungan
 
-Aplikasi ini 100% gratis dan akan selalu begitu. Jika Anda merasa aplikasi ini bermanfaat dan ingin mendukung pengembangan selanjutnya, Anda dapat memberikan donasi melalui tautan di bawah ini. Dukungan Anda sangat berarti bagi kami.
+Aplikasi ini 100% gratis dan akan selalu begitu, dikembangkan dengan semangat sumber terbuka (_open-source_). Sebagai proyek independen, pengembangan dan pemeliharaan berkelanjutan didukung oleh kontribusi sukarela dari komunitas.
 
 <a href="https://lynk.id/aiprojek/s/bvBJvdA" target="_blank">
   <img src="https://img.shields.io/badge/☕-Donasi-orange?style=for-the-badge&logo=buy-me-a-coffee" alt="Donasi">

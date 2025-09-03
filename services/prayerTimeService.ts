@@ -1,6 +1,4 @@
-
-// FIX: Corrected import path from ../types to ./types
-import type { AladhanTimingsResponse, AladhanCalendarResponse, GToHResponse } from './types';
+import type { AladhanTimingsResponse, AladhanCalendarResponse, GToHResponse } from '../types';
 
 const API_BASE_URL = 'https://api.aladhan.com/v1';
 

@@ -1,4 +1,3 @@
-
 import type { Settings, PrayerTimes, IqamahSettings, TimeCorrections } from './types';
 
 export const PRAYER_NAMES: { key: keyof PrayerTimes; labelKey: string }[] = [
@@ -159,7 +158,7 @@ export const DEFAULT_SETTINGS: Settings = {
   prayerDuration: 10,
   dzikirDuration: 5,
   theme: 'dark',
-  accentColor: '#8b5cf6', // violet-500
+  accentColor: '#ef4444', // red-500
   useWallpaper: true,
   wallpaperUrl: 'https://cdn.pixabay.com/photo/2018/04/24/17/57/masjid-nabawi-3347602_960_720.jpg',
   orientation: 'landscape',

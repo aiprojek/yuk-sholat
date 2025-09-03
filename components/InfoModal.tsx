@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { CloseIcon } from './icons';
+import { CloseIcon, GitHubIcon } from './icons';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface InfoModalProps {
@@ -74,11 +74,14 @@ const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, settings }) => {
                 {t('infoModal.supportUs')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-                <a href="https://lynk.id/aiprojek/s/bvBJvdA" target="_blank" rel="noopener noreferrer" className="w-full text-center font-semibold py-2 px-4 rounded-lg text-white transition-transform transform hover:scale-105" style={{ backgroundColor: settings.accentColor }}>
+                <a href="https://lynk.id/aiprojek/s/bvBJvdA" target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 font-semibold py-2 px-4 rounded-lg text-white transition-transform transform hover:scale-105" style={{ backgroundColor: settings.accentColor }}>
                     ☕ {t('infoModal.donate')}
                 </a>
-                <a href="https://t.me/aiprojek_community" target="_blank" rel="noopener noreferrer" className={`w-full text-center font-semibold py-2 px-4 rounded-lg transition-transform transform hover:scale-105 ${isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-slate-200 hover:bg-slate-300'}`}>
+                <a href="https://t.me/aiprojek_community" target="_blank" rel="noopener noreferrer" className={`w-full flex items-center justify-center gap-2 font-semibold py-2 px-4 rounded-lg transition-transform transform hover:scale-105 ${isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-slate-200 hover:bg-slate-300'}`}>
                     💬 {t('infoModal.contribute')}
+                </a>
+                 <a href="https://github.com/aiprojek/yuk-sholat" target="_blank" rel="noopener noreferrer" className={`w-full flex items-center justify-center gap-2 font-semibold py-2 px-4 rounded-lg transition-transform transform hover:scale-105 ${isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-slate-200 hover:bg-slate-300'}`}>
+                    <GitHubIcon className="w-5 h-5" /> {t('infoModal.github')}
                 </a>
             </div>
         </footer>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import type { Settings, PrayerTimes, IqamahSettings, TimeCorrections, RunningTextContent, InfoSlide } from '../types';
 import { CloseIcon, CheckIcon, SearchIcon } from './icons';
@@ -316,8 +315,8 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, settings
           <section className={sectionClass}>
             <h3 className="text-xl font-semibold mb-4" style={{ color: localSettings.accentColor }}>{t('settings.prayerTimes')}</h3>
             <div className="flex space-x-4 mb-4">
-              <label className="flex items-center"><input type="radio" name="prayerTimeSource" value="api" checked={localSettings.prayerTimeSource === 'api'} onChange={() => handleInputChange('prayerTimeSource', 'api')} className="mr-2" /> {t('settings.prayerTimeSourceApi')}</label>
-              <label className="flex items-center"><input type="radio" name="prayerTimeSource" value="manual" checked={localSettings.prayerTimeSource === 'manual'} onChange={() => handleInputChange('prayerTimeSource', 'manual')} className="mr-2" /> {t('settings.prayerTimeSourceManual')}</label>
+              <label className="flex items-center"><input type="radio" name="prayerTimeSource" value="api" checked={localSettings.prayerTimeSource === 'api'} onChange={() => handleInputChange('prayerTimeSource', 'api')} className="me-2" /> {t('settings.prayerTimeSourceApi')}</label>
+              <label className="flex items-center"><input type="radio" name="prayerTimeSource" value="manual" checked={localSettings.prayerTimeSource === 'manual'} onChange={() => handleInputChange('prayerTimeSource', 'manual')} className="me-2" /> {t('settings.prayerTimeSourceManual')}</label>
             </div>
 
             {localSettings.prayerTimeSource === 'api' ? (
@@ -325,8 +324,8 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, settings
                  <div>
                     <label className={labelClass}>{t('settings.locationSource')}</label>
                      <div className="flex space-x-4">
-                        <label className="flex items-center"><input type="radio" name="locationSource" value="city" checked={localSettings.locationSource === 'city'} onChange={() => handleInputChange('locationSource', 'city')} className="mr-2" /> {t('settings.locationSourceCity')}</label>
-                        <label className="flex items-center"><input type="radio" name="locationSource" value="address" checked={localSettings.locationSource === 'address'} onChange={() => handleInputChange('locationSource', 'address')} className="mr-2" /> {t('settings.locationSourceAddress')}</label>
+                        <label className="flex items-center"><input type="radio" name="locationSource" value="city" checked={localSettings.locationSource === 'city'} onChange={() => handleInputChange('locationSource', 'city')} className="me-2" /> {t('settings.locationSourceCity')}</label>
+                        <label className="flex items-center"><input type="radio" name="locationSource" value="address" checked={localSettings.locationSource === 'address'} onChange={() => handleInputChange('locationSource', 'address')} className="me-2" /> {t('settings.locationSourceAddress')}</label>
                     </div>
                 </div>
 
@@ -461,7 +460,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, settings
                     onChange={(e) => handleInputChange('enableInfoSlides', e.target.checked)} 
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                 />
-                <label htmlFor="enableInfoSlides" className="ml-2 text-sm font-medium">{t('settings.enableInfoSlides')}</label>
+                <label htmlFor="enableInfoSlides" className="ms-2 text-sm font-medium">{t('settings.enableInfoSlides')}</label>
             </div>
 
             <div className={`space-y-6 transition-opacity duration-300 ${!localSettings.enableInfoSlides ? 'opacity-50 pointer-events-none' : ''}`}>
@@ -521,8 +520,8 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, settings
                 <div>
                   <label className={labelClass}>{t('settings.theme')}</label>
                   <div className="flex space-x-4">
-                    <label className="flex items-center"><input type="radio" name="theme" value="dark" checked={localSettings.theme === 'dark'} onChange={() => handleInputChange('theme', 'dark')} className="mr-2" /> {t('settings.themeDark')}</label>
-                    <label className="flex items-center"><input type="radio" name="theme" value="light" checked={localSettings.theme === 'light'} onChange={() => handleInputChange('theme', 'light')} className="mr-2" /> {t('settings.themeLight')}</label>
+                    <label className="flex items-center"><input type="radio" name="theme" value="dark" checked={localSettings.theme === 'dark'} onChange={() => handleInputChange('theme', 'dark')} className="me-2" /> {t('settings.themeDark')}</label>
+                    <label className="flex items-center"><input type="radio" name="theme" value="light" checked={localSettings.theme === 'light'} onChange={() => handleInputChange('theme', 'light')} className="me-2" /> {t('settings.themeLight')}</label>
                   </div>
                 </div>
                 <div>
@@ -547,7 +546,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, settings
                       onChange={(e) => handleInputChange('useWallpaper', e.target.checked)} 
                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     />
-                    <label htmlFor="useWallpaper" className="ml-2 text-sm font-medium">{t('settings.useWallpaper')}</label>
+                    <label htmlFor="useWallpaper" className="ms-2 text-sm font-medium">{t('settings.useWallpaper')}</label>
                 </div>
             </div>
             <div className={`mt-4 transition-opacity duration-300 ${!localSettings.useWallpaper ? 'opacity-50 pointer-events-none' : ''}`}>
@@ -569,7 +568,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, settings
                     onChange={(e) => handleInputChange('enableAlarmSound', e.target.checked)} 
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                   />
-                  <label htmlFor="enableAlarmSound" className="ml-2 text-sm font-medium">{t('settings.enableAlarmSound')}</label>
+                  <label htmlFor="enableAlarmSound" className="ms-2 text-sm font-medium">{t('settings.enableAlarmSound')}</label>
               </div>
             </div>
             <div className={`mt-4 transition-opacity duration-300 ${!localSettings.enableAlarmSound ? 'opacity-50 pointer-events-none' : ''}`}>

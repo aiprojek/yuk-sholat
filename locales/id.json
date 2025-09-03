@@ -72,9 +72,9 @@
   "infoModal": {
     "title": "Tentang Aplikasi",
     "appName": "Yuk Sholat",
-    "appVersion": "Jadwal Sholat Digital v1.0",
+    "appVersion": "Jadwal Sholat Digital v1.1",
     "welcomeTitle": "Selamat Datang!",
-    "welcomeText": "Yuk Sholat adalah aplikasi jadwal sholat digital yang dirancang khusus untuk ditampilkan di monitor masjid. Aplikasi ini kaya fitur, dapat dikustomisasi, dan yang terpenting, dapat berjalan 100% offline setelah pengaturan awal selesai.",
+    "welcomeText": "Yuk Sholat adalah aplikasi jadwal sholat digital yang dirancang untuk ditampilkan di monitor masjid. Terinspirasi dari Mawaqit, aplikasi ini menawarkan pendekatan yang berbeda: tidak memerlukan akun atau server, semua pengaturan disimpan secara lokal di browser Anda untuk kemudahan dan privasi.",
     "guideTitle": "Panduan Pengguna",
     "guideInitialSetup": "<strong>Pengaturan Awal:</strong> Pastikan komputer terhubung ke internet saat pertama kali mengatur aplikasi. Ini diperlukan untuk mengunduh jadwal sholat bulanan untuk lokasi Anda.",
     "guideOfflineMode": "<strong>Mode Offline:</strong> Setelah jadwal berhasil diunduh, aplikasi tidak lagi memerlukan koneksi internet untuk menampilkan waktu sholat harian. Semua pengaturan, gambar latar, dan suara alarm kustom juga disimpan secara lokal di browser.",
@@ -82,9 +82,10 @@
     "guideCustomization": "<strong>Kustomisasi:</strong> Gunakan ikon gerigi (⚙️) di pojok kanan atas untuk menyesuaikan semua aspek, mulai dari nama masjid, teks berjalan, tema warna, hingga metode perhitungan waktu sholat.",
     "developer": "Developer:",
     "license": "Lisensi:",
-    "supportUs": "Aplikasi ini gratis dan open-source. Dukungan Anda membantu kami untuk terus berkembang.",
+    "supportUs": "Aplikasi ini gratis dan bersifat open-source. Kami menghargai setiap bentuk apresiasi yang diberikan.",
     "donate": "Donasi",
-    "contribute": "Kontribusi & Laporan Bug"
+    "contribute": "Gabung Diskusi",
+    "github": "GitHub"
   },
   "main": {
     "countdownPrefix": "Menuju",
@@ -159,29 +160,6 @@
       "0": "Standar (Shafi'i, Maliki, Hanbali)",
       "1": "Hanafi"
     }
-  },
-  "weekdays": {
-    "Sunday": "Ahad",
-    "Monday": "Senin",
-    "Tuesday": "Selasa",
-    "Wednesday": "Rabu",
-    "Thursday": "Kamis",
-    "Friday": "Jum'at",
-    "Saturday": "Sabtu"
-  },
-  "months": {
-    "January": "Januari",
-    "February": "Februari",
-    "March": "Maret",
-    "April": "April",
-    "May": "Mei",
-    "June": "Juni",
-    "July": "Juli",
-    "August": "Agustus",
-    "September": "September",
-    "October": "Oktober",
-    "November": "November",
-    "December": "Desember"
   },
   "hijriMonths": {
     "Muḥarram": "Muharram",

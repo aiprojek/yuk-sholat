@@ -73,7 +73,7 @@
     "appName": "Yuk Sholat",
     "appVersion": "Digital Prayer Schedule v1.1",
     "welcomeTitle": "Welcome!",
-    "welcomeText": "Yuk Sholat is a digital prayer schedule application designed specifically for display on mosque monitors. This application is feature-rich, customizable, and most importantly, can run 100% offline after the initial setup is complete.",
+    "welcomeText": "Yuk Sholat is a digital prayer schedule application designed for display on mosque monitors. Inspired by Mawaqit, this app offers a different approach: it requires no account or server, with all settings stored locally in your browser for simplicity and privacy.",
     "guideTitle": "User Guide",
     "guideInitialSetup": "<strong>Initial Setup:</strong> Ensure the computer is connected to the internet when first setting up the application. This is necessary to download the monthly prayer schedule for your location.",
     "guideOfflineMode": "<strong>Offline Mode:</strong> Once the schedule is successfully downloaded, the application no longer requires an internet connection to display daily prayer times. All settings, custom wallpapers, and alarm sounds are also stored locally in the browser.",
@@ -81,9 +81,10 @@
     "guideCustomization": "<strong>Customization:</strong> Use the gear icon (⚙️) in the top right corner to customize all aspects, from the mosque name, running text, color theme, to the prayer time calculation method.",
     "developer": "Developer:",
     "license": "License:",
-    "supportUs": "This application is free and open-source. Your support helps us to continue improving.",
+    "supportUs": "This application is free and open-source. The project is independently managed and open for collaboration.",
     "donate": "Donate",
-    "contribute": "Contribute & Report Bugs"
+    "contribute": "Join Discussion",
+    "github": "GitHub"
   },
   "main": {
     "countdownPrefix": "Next",
